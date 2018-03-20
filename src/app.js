@@ -80,7 +80,7 @@ app.use(function(err, req, res, next) {
 	
 	let status = err.status || 500;
 	// render the error page
-	res.status(status).json({message: err.message});
+	res.status(status).json({success: false, status: status, message: err.message});
 });
 
 module.exports = app; //This for testing...

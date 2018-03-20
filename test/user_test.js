@@ -7,6 +7,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../src/app');
 const should = chai.should();
+const expect = chai.expect;
 
 const postAPI = '/api/users';
 
@@ -18,6 +19,10 @@ describe('Users', () => {
 		});
 	});
 	
+	describe('/GET users', () => {
+		//it('shoul')
+		
+	});
 	
 	describe('/POST users', () => {
 		let user400 = {
@@ -38,9 +43,6 @@ describe('Users', () => {
 			user400.email = "test@owiejadskla";
 			postUser400(user400, done);
 		});
-
-		
-				
 		it('should not POST if email Address already exists in DB', (done) => {
 			let user = {
 				emailAddress: 'test@gmail.com',

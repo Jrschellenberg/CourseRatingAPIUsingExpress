@@ -29,7 +29,7 @@ router.post('/', (req, res, next) => {
 				return next(err);
 			}
 			res.location('/');
-			return res.status(201).json({message: "User Successfully added!", status: 201, user});
+			return res.status(201).json({success: true, message: "User Successfully added!", status: 201, user});
 		});
 	});
 });

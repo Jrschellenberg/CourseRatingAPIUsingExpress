@@ -11,21 +11,24 @@ const User = require('./models/user');
 const Course = require('./models/course');
 const Review = require('./models/review');
 
+console.log(process.env.NODE_ENV);
+const config = require('config');
+const dbConfig = config.get('DBHost');
+
+console.log(dbConfig);
+
 
 const index = require('./routes/index');
 const app = express();
 
-const dbName = 'TeamTreeHouseProject11';
-
-const env = process.env.NODE_ENV || 'dev';
+//const env = process.env.NODE_ENV || 'dev';
 
 //mongoDb Connection
-if(env ==='dev' || env ==='development'){
-	mongoose.connect('mongodb://localhost:27017/'+dbName );
-}
-else{
-	mongoose.connect('mongodb://mongo:27017/'+dbName);
-}
+mongoose.connect(dbConfig);
+
+
+
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -35,7 +38,7 @@ db.on('connected', function() {
 	
 	
 	
-	seeder.connect('mongodb://localhost:27017/'+dbName, function(){
+	seeder.connect(dbConfig, function(){
 		// Load Mongoose models
 		seeder.loadModels([
 			'./src/models/user',
@@ -62,7 +65,10 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+if(config.util.getEnv('NODE_ENV') !== 'test') {
+	app.use(logger('dev'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

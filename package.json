@@ -6,8 +6,8 @@
   "scripts": {
     "babel-node": "babel-node --presets=es2015",
     "nodemon": "nodemon -e pug,js,css --exec npm run babel-node -- src/bin/www",
-    "start": "npm run nodemon",
-    "test": "mocha --compilers js:babel-register --recursive ./test/"
+    "start": "SET NODE_ENV=dev && npm run nodemon",
+    "test": "mocha --timeout 10000 --compilers js:babel-register --recursive ./test/"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
   "dependencies": {
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
+    "config": "^1.30.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.15.5",

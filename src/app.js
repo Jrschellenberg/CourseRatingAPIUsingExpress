@@ -11,14 +11,13 @@ const User = require('./models/user');
 const Course = require('./models/course');
 const Review = require('./models/review');
 
-console.log(process.env.NODE_ENV);
 const config = require('config');
 const dbConfig = config.get('DBHost');
 
-console.log(dbConfig);
 
 
 const index = require('./routes/index');
+const user = require('./routes/user');
 const app = express();
 
 //const env = process.env.NODE_ENV || 'dev';
@@ -33,28 +32,21 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.on('connected', function() {
-	
-	//seeder.seed(data);
-	
-	
-	
 	seeder.connect(dbConfig, function(){
+		console.log("seeder connected to Database "+dbConfig);
 		// Load Mongoose models
 		seeder.loadModels([
 			'./src/models/user',
 			'./src/models/course',
 			'./src/models/review'
 		]);
-
 		// Clear specified collections
 		seeder.clearModels(['User', 'Course', 'Review'], function() {
 			// Callback to populate DB once collections have been cleared
 			seeder.populateModels(data, function() {
-				seeder.disconnect();
+				console.log("Finished seeding Database!");
 			});
-
 		});
-		console.log("seeder connected to Database!");
 	});
 });
 
@@ -75,6 +67,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/api/users', user);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -94,8 +87,4 @@ app.use(function(err, req, res, next) {
 	res.render('error');
 });
 
-
-
-
-
-module.exports = app;
+module.exports = app; //This for testing...

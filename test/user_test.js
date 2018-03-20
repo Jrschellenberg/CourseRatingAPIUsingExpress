@@ -8,7 +8,7 @@ const chaiHttp = require('chai-http');
 const server = require('../src/app');
 const should = chai.should();
 
-const postAPI = '/user';
+const postAPI = '/api/users';
 
 
 describe('Users', () => {
@@ -19,7 +19,7 @@ describe('Users', () => {
 	});
 	
 	
-	describe('/POST user', () => {
+	describe('/POST users', () => {
 		let user400 = {
 			emailAddress: 'wre23sd',
 			password: 'password',

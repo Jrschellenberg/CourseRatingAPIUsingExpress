@@ -11,12 +11,11 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe('Courses', () => {
-	//This was causing hanging errors....
-	// beforeEach((done) => {
-	// 	Course.remove({}, (err) => {
-	// 		done();
-	// 	});
-	// });
+	beforeEach((done) => {
+		Course.remove({}, (err) => {
+			done();
+		});
+	});
 	
 	/*
 	Our GET Tests
@@ -53,23 +52,20 @@ describe('Courses', () => {
 				.post('/course')
 				.send(course)
 				.end((err, res) => {
-					res.should.have.status(200);
+					res.should.have.status(201);
 					res.body.should.be.a('object');
 					res.body.course.should.have.property('title');
-					
 					done();
 				});
-			
-			
 		});
 		
 		
-		it('should not POST a course without no fields', (done) => {
+		it('should not POST a course with no fields', (done) => {
 			let course = {};
 			postCourse(course, done);
 		});
 		
-		it('should not POST a course without title field', (done) => {
+		it('should not POST a course missing title field', (done) => {
 			let course = {
 				description: "My course description",
 				user: {
@@ -85,7 +81,7 @@ describe('Courses', () => {
 			postCourse(course, done);
 		});
 		
-		it('should not POST a course without description field', (done) => {
+		it('should not POST a course missing description field', (done) => {
 			let course = {
 				title: "my title",
 				user: {
@@ -106,7 +102,6 @@ describe('Courses', () => {
 				.send(course)
 				.end((err, res) => {
 					res.should.have.status(400);
-					
 					done();
 				});
 		}

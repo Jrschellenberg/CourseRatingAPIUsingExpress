@@ -18,39 +18,34 @@ router.post('/course', (req, res, next) => {
 	  const err = new Error("Bad Request");
 	  err.status = 400;
 	  return next(err);
-	  //return res.json({body: req.body});
   }
-  
-  const courseData = {
-  	user: req.body.user._id,
-	  title: req.body.title,
-	  description: req.body.description,
-	  estimatedTime: req.body.estimatedTime,
-	  materialsNeeded: req.body.materialsNeeded,
-	  steps: req.body.steps,
-	  reviews: req.body.reviews
-  };
-  console.log(courseData);
+  const courseData = req.body;
   Course.create(courseData, (err, course) => {
-    if(err){
-    	console.log("hitting error?");
-      return next(err);
+    if(err){ 
+    	return next(err);
     }
-    console.log("This shit ever get hit?");
-    return res.json({message: "Course Successfully added!", course});
+	  return res.status(201).json({message: "User Successfully added!", status: 201, course});
   });
 });
 
-
 router.post('/user', (req, res, next) => {
-	console.log("hit the request...");
+	if(!req.body.emailAddress || !req.body.fullName || !req.body.password){
+		const err = new Error("Missing Parameters");
+		err.status = 422;
+		return next(err);
+	}
+	if(!User.validEmail(req.body.emailAddress)){
+		const err = new Error("Malformed Email Supplied");
+		err.status = 400;
+		return next(err);
+	}
+	
 	const userData = req.body;
 	User.create(userData, (err, user) => {
-		console.log("got into the create method?!?!");
 		if (err) {
 			return next(err);
 		}
-		return res.json({message: "User Successfully added!", user});
+		return res.status(201).json({message: "User Successfully added!", status: 201, user});
 	});
 	
 });

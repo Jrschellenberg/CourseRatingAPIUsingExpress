@@ -7,7 +7,7 @@
     "babel-node": "babel-node --presets=es2015",
     "nodemon": "nodemon -e pug,js,css --exec npm run babel-node -- src/bin/www",
     "start": "SET NODE_ENV=dev && npm run nodemon",
-    "test": "mocha --timeout 20000 --compilers js:babel-register --recursive ./test/"
+    "test": "mocha --timeout 5000 --compilers js:babel-register --recursive ./test/"
   },
   "author": "",
   "license": "ISC",

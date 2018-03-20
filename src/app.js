@@ -25,9 +25,6 @@ const app = express();
 //mongoDb Connection
 mongoose.connect(dbConfig);
 
-
-
-
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -49,7 +46,6 @@ db.on('connected', function() {
 		});
 	});
 });
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -82,9 +78,9 @@ app.use(function(err, req, res, next) {
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 	
+	let status = err.status || 500;
 	// render the error page
-	res.status(err.status || 500);
-	res.render('error');
+	res.status(status).json({message: err.message});
 });
 
 module.exports = app; //This for testing...

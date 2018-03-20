@@ -39,15 +39,19 @@ router.post('/user', (req, res, next) => {
 		err.status = 400;
 		return next(err);
 	}
-	
-	const userData = req.body;
-	User.create(userData, (err, user) => {
-		if (err) {
+	User.userExist(req.body.emailAddress, (err) => {
+		if(err){
 			return next(err);
 		}
-		return res.status(201).json({message: "User Successfully added!", status: 201, user});
+		const userData = req.body;
+		User.create(userData, (err, user) => {
+			if (err) {
+				return next(err);
+			}
+			res.location('/');
+			return res.status(201).json({message: "User Successfully added!", status: 201, user});
+		});
 	});
-	
 });
 
 module.exports = router;

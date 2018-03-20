@@ -56,8 +56,8 @@ describe('Users', () => {
 						.post(postAPI)
 						.send(user)
 						.end((err, res) => {
-						err.message.should.be.equal('test');
-						res.should.have.status(500);
+						res.body.should.have.property('message').equal("User Already Exists");
+						res.should.have.status(409); //Conflict error
 						done();
 						});
 				});

@@ -11,6 +11,8 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
+let courseIndexLink = '/api/courses/';
+
 describe('Courses', () => {
 	beforeEach((done) => {
 		Course.remove({}, (err) => {
@@ -25,7 +27,7 @@ describe('Courses', () => {
 	describe('/GET course', () => {
 		it('should GET all the courses', (done) => {
 			chai.request(server)
-				.get('/course')
+				.get(courseIndexLink)
 				.end((err, res) => {
 					res.should.have.status(200);
 					done();
@@ -50,7 +52,7 @@ describe('Courses', () => {
 				]
 			};
 			chai.request(server)
-				.post('/course')
+				.post(courseIndexLink)
 				.send(course)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -99,7 +101,7 @@ describe('Courses', () => {
 		});
 		function postCourse(course, done){
 			chai.request(server)
-				.post('/course')
+				.post(courseIndexLink)
 				.send(course)
 				.end((err, res) => {
 					res.should.have.status(400);

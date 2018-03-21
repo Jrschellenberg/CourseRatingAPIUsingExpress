@@ -2,7 +2,6 @@ const auth = require('basic-auth');
 const User = require('../models/user');
 import Utils from '../utils';
 
-
 export function authorizeUser(req, res, next) {
 	let user = auth(req);
 	if(!user || !user.name || !user.pass){

@@ -20,10 +20,10 @@ describe('Users', () => {
 			chai.request(server)
 				.get(getAPI)
 				.end((err, res) => {
-				res.should.have.status(401);
-				res.body.should.have.property('success').equal(false);
-				res.body.should.have.property('message').equal("Access Denied: Please supply login credentials!");
-				done();
+					res.should.have.status(401);
+					res.body.should.have.property('success').equal(false);
+					res.body.should.have.property('message').equal("Access Denied: Please supply login credentials!");
+					done();
 				});
 		});
 		it('should not GET if auth headers supplied are invalid', (done) => {
@@ -35,14 +35,21 @@ describe('Users', () => {
 		});
 		
 		it('should GET if auth headers are present', (done) => {
+			let user = {
+				_id: "57029ed4795118be119cc437",
+				fullName: "Joe Smith",
+				emailAddress: "joe@smith.com",
+				__v: 0
+			};
+			
 			let auth = {
 				user: 'joe@smith.com',
 				pass: 'password'
 			};
-			getAuthRequest(auth, 200, true, "User Successfully retrieved", done);
+			getAuthRequest(auth, 200, true, "User Successfully retrieved", done, user);
 		});
 		
-		function getAuthRequest(auth, status, success, msg, done){
+		function getAuthRequest(auth, status, success, msg, done, user) {
 			chai.request(server)
 				.get(getAPI)
 				.auth(auth.user, auth.pass)
@@ -50,6 +57,11 @@ describe('Users', () => {
 					res.should.have.status(status);
 					res.body.should.have.property('success').equal(success);
 					res.body.should.have.property('message').equal(msg);
+					if(user){
+						res.body.should.have.property('user').property('fullName').equal(user.fullName);
+						res.body.should.have.property('user').property('emailAddress').equal(user.emailAddress);
+						res.body.should.have.property('user').property('_id').equal(user._id);
+					}
 					done();
 				});
 		}
@@ -94,9 +106,9 @@ describe('Users', () => {
 						.post(postAPI)
 						.send(user)
 						.end((err, res) => {
-						res.body.should.have.property('message').equal("User Already Exists");
-						res.should.have.status(409); //Conflict error
-						done();
+							res.body.should.have.property('message').equal("User Already Exists");
+							res.should.have.status(409); //Conflict error
+							done();
 						});
 				});
 		});
@@ -126,7 +138,8 @@ describe('Users', () => {
 			};
 			postUser(user, done);
 		});
-		function postUser(user, done){
+		
+		function postUser(user, done) {
 			chai.request(server)
 				.post(postAPI)
 				.send(user)
@@ -136,7 +149,8 @@ describe('Users', () => {
 					done();
 				});
 		}
-		function postUser400(user, done ) {
+		
+		function postUser400(user, done) {
 			chai.request(server)
 				.post(postAPI)
 				.send(user)

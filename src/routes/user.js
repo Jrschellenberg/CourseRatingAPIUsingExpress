@@ -4,17 +4,24 @@ const User = require('../models/user');
 import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
-/* GET home page. */
-router.get('/', authorizeUser, (req, res) => {
-	// if(!req.session || !req.session.userId){
-	// 	Utils.throwError()
-	// }
-	// User.findById(req.session.userId)
-	let status = 200;
-	res.status(status).json({success: true, message: "User Successfully retrieved", status: status});
+/* GET Routes */
+router.get('/', authorizeUser, (req, res, next) => {
+	if(!req.session || !req.session.userId){
+		return Utils.throwError(401, "Invalid or missing SessionId", next);
+	}
+	User.findById(req.session.userId)
+		.exec((error, user) => {
+			if(error){
+				return next(error);
+			}
+			let status = 200;
+			res.status(status).json({success: true, message: "User Successfully retrieved", status: status, user: user});
+		});
 });
 
-
+/*
+Post Routes
+ */
 router.post('/', (req, res, next) => {
 	if(!req.body.emailAddress || !req.body.fullName || !req.body.password){
 		return Utils.throwError(422, "Missing Parameters", next);

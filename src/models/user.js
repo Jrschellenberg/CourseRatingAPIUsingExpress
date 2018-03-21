@@ -43,7 +43,6 @@ UserSchema.statics.authenticate = function (email, password, callback) {
 		});
 };
 
-
 /*
 May need some logic here later to check if email in correct format.
  */

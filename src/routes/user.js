@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 import {authorizeUser} from "../middleware/index";
+import Utils from '../utils';
 
 /* GET home page. */
-router.get('/', authorizeUser, (req, res, next) => {
-	console.log(req.session.userId);
+router.get('/', authorizeUser, (req, res) => {
+	// if(!req.session || !req.session.userId){
+	// 	Utils.throwError()
+	// }
+	// User.findById(req.session.userId)
 	let status = 200;
 	res.status(status).json({success: true, message: "User Successfully retrieved", status: status});
 });
@@ -13,14 +17,10 @@ router.get('/', authorizeUser, (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 	if(!req.body.emailAddress || !req.body.fullName || !req.body.password){
-		const err = new Error("Missing Parameters");
-		err.status = 422;
-		return next(err);
+		return Utils.throwError(422, "Missing Parameters", next);
 	}
 	if(!User.validEmail(req.body.emailAddress)){
-		const err = new Error("Malformed Email Supplied");
-		err.status = 400;
-		return next(err);
+		return Utils.throwError(400, "Malformed Email Supplied", next);
 	}
 	User.userExist(req.body.emailAddress, (err) => {
 		if(err){

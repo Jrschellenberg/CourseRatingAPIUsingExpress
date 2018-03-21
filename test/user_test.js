@@ -1,4 +1,5 @@
 //During the test the env variable is set to test
+'use strict';
 process.env.NODE_ENV = 'test';
 
 const User = require('../src/models/user');

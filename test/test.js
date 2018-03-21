@@ -1,13 +1,9 @@
 'use strict';
 process.env.NODE_ENV = 'test';
-
-
 import { expect } from 'chai'
 
-
-
-describe('test', function () {
-	it('should pass', function () {
+describe('test', ()  => {
+	it('should pass', () => {
 		expect('string').to.be.a('string')
 	});
 	

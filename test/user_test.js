@@ -41,7 +41,6 @@ describe('Users', () => {
 				emailAddress: "joe@smith.com",
 				__v: 0
 			};
-			
 			let auth = {
 				user: 'joe@smith.com',
 				pass: 'password'

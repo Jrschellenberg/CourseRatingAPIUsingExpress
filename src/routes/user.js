@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+import {authorizeUser} from "../middleware/index";
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', authorizeUser, (req, res, next) => {
+	console.log(req.session.userId);
 	res.send('test');
 });
 

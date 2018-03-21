@@ -10,21 +10,57 @@ const should = chai.should();
 const expect = chai.expect;
 
 const postAPI = '/api/users';
+const getAPI = postAPI;
 
 
 describe('Users', () => {
-	beforeEach((done) => {
-		User.remove({}, (err) => {
-			done();
-		});
-	});
 	
 	describe('/GET users', () => {
-		//it('shoul')
+		it('should not GET if auth headers are missing', (done) => {
+			chai.request(server)
+				.get(getAPI)
+				.end((err, res) => {
+				res.should.have.status(401);
+				res.body.should.have.property('success').equal(false);
+				res.body.should.have.property('message').equal("Access Denied: Please supply login credentials!");
+				done();
+				});
+		});
+		it('should not GET if auth headers supplied are invalid', (done) => {
+			let auth = {
+				user: 'user@notValidEmail.com',
+				pass: 'notValidPass'
+			};
+			getAuthRequest(auth, 401, false, "Access Denied: Wrong email or password", done);
+		});
 		
+		it('should GET if auth headers are present', (done) => {
+			let auth = {
+				user: 'joe@smith.com',
+				pass: 'password'
+			};
+			getAuthRequest(auth, 200, true, "User Successfully retrieved", done);
+		});
+		
+		function getAuthRequest(auth, status, success, msg, done){
+			chai.request(server)
+				.get(getAPI)
+				.auth(auth.user, auth.pass)
+				.end((err, res) => {
+					res.should.have.status(status);
+					res.body.should.have.property('success').equal(success);
+					res.body.should.have.property('message').equal(msg);
+					done();
+				});
+		}
 	});
 	
 	describe('/POST users', () => {
+		beforeEach((done) => {
+			User.remove({}, (err) => {
+				done();
+			});
+		});
 		let user400 = {
 			emailAddress: 'wre23sd',
 			password: 'password',
@@ -96,6 +132,7 @@ describe('Users', () => {
 				.send(user)
 				.end((err, res) => {
 					res.should.have.status(422);
+					res.body.should.have.property('success').equal(false);
 					done();
 				});
 		}
@@ -106,6 +143,7 @@ describe('Users', () => {
 				.end((err, res) => {
 					res.should.have.status(400);
 					res.body.should.have.property('message').equal("Malformed Email Supplied");
+					res.body.should.have.property('success').equal(false);
 					done();
 				});
 		}

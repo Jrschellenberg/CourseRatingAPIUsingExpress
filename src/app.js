@@ -10,6 +10,8 @@ const data = require('./data/data.json');
 const User = require('./models/user');
 const Course = require('./models/course');
 const Review = require('./models/review');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const config = require('config');
 const dbConfig = config.get('DBHost');
@@ -54,6 +56,17 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
+app.use(session({
+	secret: "The Session secret, which should not be public. Put into a secrets.js",
+	resave: true,
+	saveUninitialized: false,
+	store: new MongoStore({
+		mongooseConnection: db //db must first be defined.
+	})
+}));
+
+
+
 if(config.util.getEnv('NODE_ENV') !== 'test') {
 	app.use(logger('dev'));
 }
@@ -67,7 +80,7 @@ app.use('/api/users', user);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	var err = new Error('Not Found');
+	const err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
@@ -78,7 +91,7 @@ app.use(function(err, req, res, next) {
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 	
-	let status = err.status || 500;
+	const status = err.status || 500;
 	// render the error page
 	res.status(status).json({success: false, status: status, message: err.message});
 });

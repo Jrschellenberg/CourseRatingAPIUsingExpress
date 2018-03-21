@@ -6,7 +6,8 @@ import {authorizeUser} from "../middleware/index";
 /* GET home page. */
 router.get('/', authorizeUser, (req, res, next) => {
 	console.log(req.session.userId);
-	res.send('test');
+	let status = 200;
+	res.status(status).json({success: true, message: "User Successfully retrieved", status: status});
 });
 
 

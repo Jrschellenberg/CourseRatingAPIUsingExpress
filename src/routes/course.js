@@ -4,7 +4,7 @@ const Course = require('../models/course');
 import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
-router.get('/',authorizeUser, (req, res, next) => {
+router.get('/', (req, res, next) => {
 	let status = 200;
 	return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status});
 });

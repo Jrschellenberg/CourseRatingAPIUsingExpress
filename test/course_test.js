@@ -30,23 +30,12 @@ describe('Courses', () => {
 	
 	describe('/GET course', () => {
 		it('should GET all the courses', (done) => {
-			let user = {
-				emailAddress: validAuth.user,
-				password: validAuth.pass,
-				fullName: "Joe Smith"
-			};
 			chai.request(server)
-				.post('/api/users/')
-				.send(user)
+				.get(courseIndexLink)
 				.end((err, res) => {
-					chai.request(server)
-						.get(courseIndexLink)
-						.auth(validAuth.user, validAuth.pass)
-						.end((err, res) => {
-							res.body.should.have.property('message').equal("Courses Successfully retrieved!");
-							res.should.have.status(200);
-							done();
-						});
+					res.body.should.have.property('message').equal("Courses Successfully retrieved!");
+					res.should.have.status(200);
+					done();
 				});
 		});
 	});

@@ -1,6 +1,7 @@
 'use strict';
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
+import {dataBaseFinishSeed} from "../src/finishSeed";
 
 const Course = require('../src/models/course'),
 	chai = require('chai'),
@@ -12,17 +13,19 @@ const should = chai.should();
 const courseIndexLink = '/api/courses/';
 chai.use(chaiHttp);
 
+
 const validAuth = {
 	user: 'joe@smith.com',
 	pass: 'password'
 };
 
 describe('Courses', () => {
-	// beforeEach((done) => {
-	// 	Course.remove({}, (err) => {
-	// 		done();
-	// 	});
-	// });
+	beforeEach((done) => { //This hangs the tests until databaesFinish seed..
+		if(dataBaseFinishSeed){done();} //if it has finished seeding it will hit callback, else forever hangs
+		server.on('appStarted', () => { //Once finish seed, set to true and stop hang.
+			done();
+		});
+	});
 	/*
 	Our GET Tests
 	 */
@@ -68,7 +71,7 @@ describe('Courses', () => {
 				.auth(validAuth.user, validAuth.pass)
 				.send(course)
 				.end((err, res) => {
-					res.body.should.have.property('message').equal('test');
+					res.body.should.have.property('message').equal('Course Successfully added!');
 					res.should.have.status(201);
 					res.body.should.be.a('object');
 					res.body.course.should.have.property('title');

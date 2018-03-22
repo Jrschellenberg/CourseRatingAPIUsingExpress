@@ -42,14 +42,18 @@ describe('Courses', () => {
 		});
 	});
 	
-	// describe('/GET course', () => {
-	// 	it('should GET a course when provided with valid ID', (done) => {
-	//		
-	//		
-	//		
-	// 	});
-	//	
-	// });
+	describe('/GET course', () => {
+		it('should GET a course when provided with valid ID', (done) => {
+			chai.request(server)
+				.get(courseIndexLink+'57029ed4795118be119cc43d')
+				.end((err, res) => {
+					res.body.should.have.property('message').equal("Course Successfully retrieved!");
+					res.should.have.status(200);
+					done();
+				});
+		});
+
+	});
 	
 	describe('/POST courses', () => {
 		it('should POST a course with proper fields and proper auth', (done) => {

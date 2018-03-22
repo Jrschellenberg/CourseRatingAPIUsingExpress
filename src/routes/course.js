@@ -22,13 +22,34 @@ router.get('/', (req, res, next) => {
 	});
 });
 
-// router.get('/:courseId', (req, res, next) => {
-// 	Course.findbyId(req.params.courseId, (err, course) => {
-//		
-//		
-// 	});
-//	
-// });
+router.get('/:courseId', (req, res, next) => {
+	Course.findById(req.params.courseId, (err, course) => {
+		Utils.isError(err, next);
+		course.getUser((err1, user) => {
+			Utils.isError(err1, next);
+			course.user = user;
+			let itemsProcessed = 0;
+			course.reviews.forEach((courseReview, index, array) => {
+				course.getReview(index, (err2, review) => {
+					Utils.isError(err2, next);
+					review.getUser((err3, reviewUser) => {
+						Utils.isError(err3, next);
+						review.user = reviewUser;
+						course.reviews[index] = review;
+						itemsProcessed++;
+						if(itemsProcessed === array.length){
+							res.locals.course = course;
+							next();
+						}
+					});
+				});
+			});
+		});
+	});
+}, (req, res) => {
+	let status = 200;
+	return res.status(status).json({success: true, message: "Course Successfully retrieved!", status: status, course: res.locals.course });
+});
 
 router.post('/', authorizeUser, (req, res, next) => {
 	if(!req.body.title || !req.body.description){

@@ -4,4 +4,9 @@ export default class Utils {
 		err.status = status;
 		return next(err);
 	}
+	static isError(err, next){
+		if(err){
+			return next(err);
+		}
+	}
 }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const User = require('./user');
 
 const ReviewSchema = new Schema({
 	user: {
@@ -20,6 +21,10 @@ const ReviewSchema = new Schema({
 		type: String
 	}
 });
+
+ReviewSchema.methods.getUser = function(cb) {
+	return User.findById(this.user, cb);
+};
 
 
 const Review = mongoose.model('Review', ReviewSchema);

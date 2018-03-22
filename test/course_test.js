@@ -3,9 +3,9 @@
 process.env.NODE_ENV = 'test';
 
 const Course = require('../src/models/course'),
-	 chai = require('chai'),
-	 chaiHttp = require('chai-http'),
-	 server = require('../src/app');
+	chai = require('chai'),
+	chaiHttp = require('chai-http'),
+	server = require('../src/app');
 
 
 const should = chai.should();
@@ -30,13 +30,24 @@ describe('Courses', () => {
 	
 	describe('/GET course', () => {
 		it('should GET all the courses', (done) => {
+			let user = {
+				emailAddress: validAuth.user,
+				password: validAuth.pass,
+				fullName: "Joe Smith"
+			};
 			chai.request(server)
-				.get(courseIndexLink)
+				.post('/api/users/')
+				.send(user)
 				.end((err, res) => {
-					res.should.have.status(200);
-					done();
+					chai.request(server)
+						.get(courseIndexLink)
+						.auth(validAuth.user, validAuth.pass)
+						.end((err, res) => {
+							res.body.should.have.property('message').equal("Courses Successfully retrieved!");
+							res.should.have.status(200);
+							done();
+						});
 				});
-			
 		});
 	});
 	
@@ -104,7 +115,8 @@ describe('Courses', () => {
 			};
 			postCourse(course, done);
 		});
-		function postCourse(course, done){
+		
+		function postCourse(course, done) {
 			chai.request(server)
 				.post(courseIndexLink)
 				.auth(validAuth.user, validAuth.pass)

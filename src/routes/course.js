@@ -4,8 +4,9 @@ const Course = require('../models/course');
 import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
-router.get('/', (req, res, next) => {
-	res.send("hello!");
+router.get('/',authorizeUser, (req, res, next) => {
+	let status = 200;
+	return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status});
 });
 
 router.post('/', authorizeUser, (req, res, next) => {
@@ -18,7 +19,7 @@ router.post('/', authorizeUser, (req, res, next) => {
 			return next(err);
 		}
 		let status = 201;
-		return res.status(status).json({success: true, message: "User Successfully added!", status: status, course});
+		return res.status(status).json({success: true, message: "Course Successfully added!", status: status, course});
 	});
 });
 

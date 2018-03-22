@@ -5,8 +5,21 @@ import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
 router.get('/', (req, res, next) => {
-	let status = 200;
-	return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status});
+	Course.find({}, (err, docs) => {
+		if(err){
+			return next(err);
+		}
+		let courses = [];
+		for(let i=0; i<docs.length; i++){
+			let obj = {
+				_id: docs[i]._id,
+				title: docs[i].title
+			};
+			courses.push(obj);
+		}
+		let status = 200;
+		return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status, courses: courses});
+	});
 });
 
 router.post('/', authorizeUser, (req, res, next) => {

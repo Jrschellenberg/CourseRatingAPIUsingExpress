@@ -28,7 +28,7 @@ describe('Courses', () => {
 	Our GET Tests
 	 */
 	
-	describe('/GET course', () => {
+	describe('/GET courses', () => {
 		it('should GET all the courses', (done) => {
 			chai.request(server)
 				.get(courseIndexLink)
@@ -40,7 +40,7 @@ describe('Courses', () => {
 		});
 	});
 	
-	describe('/POST course', () => {
+	describe('/POST courses', () => {
 		it('should POST a course with proper fields and proper auth', (done) => {
 			let course = {
 				title: "My first title!",

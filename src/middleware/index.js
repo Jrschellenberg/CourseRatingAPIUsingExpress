@@ -7,8 +7,6 @@ export function authorizeUser(req, res, next) {
 	if(!user || !user.name || !user.pass){
 		return Utils.throwError(401, "Access Denied: Please supply login credentials!", next);
 	}
-	console.log(user.name);
-	console.log(user.pass);
 	User.authenticate(user.name, user.pass, (error, user) => {
 		if(error || !user){
 			return Utils.throwError(401, "Access Denied: Wrong email or password", next);

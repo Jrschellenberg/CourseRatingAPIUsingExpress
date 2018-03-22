@@ -26,7 +26,8 @@ router.get('/:courseId', (req, res, next) => {
 	Course
 		.findById(req.params.courseId)
 		.populate('user')
-		.populate('reviews')
+		.populate({path: 'reviews',
+		 populate: {path: 'user'}})
 		.exec((err, course) => {
 			Utils.isError(err, next);
 			res.locals.course = course;

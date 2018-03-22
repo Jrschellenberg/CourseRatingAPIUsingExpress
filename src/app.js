@@ -16,8 +16,6 @@ const MongoStore = require('connect-mongo')(session);
 const config = require('config');
 const dbConfig = config.get('DBHost');
 
-
-
 const course = require('./routes/course');
 const user = require('./routes/user');
 const app = express();

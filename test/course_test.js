@@ -2,16 +2,20 @@
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-const Course = require('../src/models/course');
+const Course = require('../src/models/course'),
+	 chai = require('chai'),
+	 chaiHttp = require('chai-http'),
+	 server = require('../src/app');
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../src/app');
+
 const should = chai.should();
-
+const courseIndexLink = '/api/courses/';
 chai.use(chaiHttp);
 
-let courseIndexLink = '/api/courses/';
+const validAuth = {
+	user: 'joe@smith.com',
+	pass: 'password'
+};
 
 describe('Courses', () => {
 	beforeEach((done) => {
@@ -37,7 +41,7 @@ describe('Courses', () => {
 	});
 	
 	describe('/POST course', () => {
-		it('should POST a course with proper fields', (done) => {
+		it('should POST a course with proper fields and proper auth', (done) => {
 			let course = {
 				title: "My first title!",
 				description: "My course description",
@@ -53,6 +57,7 @@ describe('Courses', () => {
 			};
 			chai.request(server)
 				.post(courseIndexLink)
+				.auth(validAuth.user, validAuth.pass)
 				.send(course)
 				.end((err, res) => {
 					res.should.have.status(201);
@@ -102,8 +107,10 @@ describe('Courses', () => {
 		function postCourse(course, done){
 			chai.request(server)
 				.post(courseIndexLink)
+				.auth(validAuth.user, validAuth.pass)
 				.send(course)
 				.end((err, res) => {
+					//res.body.should.have.property('message').equal("test message");
 					res.should.have.status(400);
 					done();
 				});

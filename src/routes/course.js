@@ -5,22 +5,30 @@ import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
 router.get('/', (req, res, next) => {
-	Course.find({}, (err, docs) => {
+	Course.find({}, (err, courses) => {
 		if(err){
 			return next(err);
 		}
-		let courses = [];
-		for(let i=0; i<docs.length; i++){
+		let coursesArray = [];
+		for(let i=0; i<courses.length; i++){
 			let obj = {
-				_id: docs[i]._id,
-				title: docs[i].title
+				_id: courses[i]._id,
+				title: courses[i].title
 			};
-			courses.push(obj);
+			coursesArray.push(obj);
 		}
 		let status = 200;
-		return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status, courses: courses});
+		return res.status(status).json({success: true, message: "Courses Successfully retrieved!", status: status, courses: coursesArray});
 	});
 });
+
+// router.get('/:courseId', (req, res, next) => {
+// 	Course.findbyId(req.params.courseId, (err, course) => {
+//		
+//		
+// 	});
+//	
+// });
 
 router.post('/', authorizeUser, (req, res, next) => {
 	if(!req.body.title || !req.body.description){

@@ -68,11 +68,6 @@ describe('Users', () => {
 	});
 	
 	describe('/POST users', () => {
-		// beforeEach((done) => {
-		// 	User.remove({}, (err) => {
-		// 		done();
-		// 	});
-		// });
 		let user400 = {
 			emailAddress: 'wre23sd',
 			password: 'password',

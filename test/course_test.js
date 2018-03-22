@@ -18,12 +18,11 @@ const validAuth = {
 };
 
 describe('Courses', () => {
-	beforeEach((done) => {
-		Course.remove({}, (err) => {
-			done();
-		});
-	});
-	
+	// beforeEach((done) => {
+	// 	Course.remove({}, (err) => {
+	// 		done();
+	// 	});
+	// });
 	/*
 	Our GET Tests
 	 */
@@ -39,6 +38,15 @@ describe('Courses', () => {
 				});
 		});
 	});
+	
+	// describe('/GET course', () => {
+	// 	it('should GET a course when provided with valid ID', (done) => {
+	//		
+	//		
+	//		
+	// 	});
+	//	
+	// });
 	
 	describe('/POST courses', () => {
 		it('should POST a course with proper fields and proper auth', (done) => {
@@ -60,6 +68,7 @@ describe('Courses', () => {
 				.auth(validAuth.user, validAuth.pass)
 				.send(course)
 				.end((err, res) => {
+					res.body.should.have.property('message').equal('test');
 					res.should.have.status(201);
 					res.body.should.be.a('object');
 					res.body.course.should.have.property('title');

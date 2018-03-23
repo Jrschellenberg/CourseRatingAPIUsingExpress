@@ -4,6 +4,10 @@ const Course = require('../models/course');
 import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
+/*
+GET routes
+ */
+
 router.get('/', (req, res, next) => {
 	Course.find({}, (err, courses) => {
 		if(err){
@@ -36,6 +40,22 @@ router.get('/:courseId', (req, res, next) => {
 		});
 });
 
+/*
+PUT Routes
+ */
+router.put('/:courseId', authorizeUser, (req, res, next) => {
+	Course.findByIdAndUpdate(req.params.courseId, req.body, (err, course) => {
+		console.log("hit this?!?");
+		Utils.isError(err, next);
+		let status = 204;
+		console.log("how about here?!?!");
+		return res.status(status).json({}); //Send status 204 and no content..
+	});
+});
+
+/*
+POST Routes
+ */
 router.post('/', authorizeUser, (req, res, next) => {
 	if(!req.body.title || !req.body.description){
 		return Utils.throwError(400, "Bad Request", next );

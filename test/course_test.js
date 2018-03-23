@@ -52,7 +52,46 @@ describe('Courses', () => {
 					done();
 				});
 		});
-
+	});
+	
+	describe('/PUT course', () => {
+		let course = {
+			title: "My first title!",
+			description: "My course description",
+			user: {
+				_id: "57029ed4795118be119cc437"
+			},
+			steps: [
+				{
+					title: "step 1",
+					description: "My first Updated Step!"
+				}
+			]
+		};
+		it('should PUT a course with proper fields and proper auth', (done) => {
+			chai.request(server)
+				.put(courseIndexLink+'57029ed4795118be119cc43d')
+				.auth(validAuth.user, validAuth.pass)
+				.send(course)
+				.end((err, res) => {
+					//res.body.should.have.property('message').equal('Course Successfully Updated!');
+					res.should.have.status(204);
+					done();
+				});
+		});
+		
+		it('should not PUT a course if not authenticated user', (done) => {
+			chai.request(server)
+				.put(courseIndexLink+'57029ed4795118be119cc43d')
+				.auth('InvalidUser'+validAuth.user, validAuth.pass)
+				.send(course)
+				.end((err, res) => {
+					//res.body.should.have.property('message').equal('Course Successfully Updated!');
+					res.should.have.status(401);
+					done();
+				});
+		})
+		
 	});
 	
 	describe('/POST courses', () => {

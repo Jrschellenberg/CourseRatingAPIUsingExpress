@@ -173,25 +173,68 @@ describe('Courses', () => {
 	});
 	
 	describe('/POST course/:courseId/reviews', () => {
+		let review = {
+			user: '57029ed4795118be119cc438',
+			postedOn: "2016-02-04T21:22:00.000Z",
+			rating: 4,
+			review: "Lorem ipsum This is a review that I am writing, blah blah blah de blah"
+		};
+		let courseId = "57029ed4795118be119cc43d";
+		
 		it('should POST when a review is supplied with proper information and has an authorized user', (done) => {
-			let review = {
-				user: '57029ed4795118be119cc438',
-				postedOn: "2016-02-04T21:22:00.000Z",
-				rating: 4,
-				review: "Lorem ipsum This is a review that I am writing, blah blah blah de blah"
-			};
-			let courseId = "57029ed4795118be119cc43d";
-			postReview(courseId, validAuth, review, done);
+			successPostReview(courseId, validAuth, review, done);
 		});
 		
-		function postReview(courseId, validAuth, review, done) {
+		it('should POST only required attribute for review when supplied with garbage parameters', (done) => {
+			let excessReview = review;
+			excessReview.extra = 'this is extra param';
+			successPostReview(courseId, validAuth, excessReview, done);
+		});
+		
+		it('should not POST when user is not authorized', (done) => {
+			let invalidAuth = {
+				user: 'invalid@notvalid.com',
+				pass: 'notValidPass'
+			};
+			failPostReview(401, "Access Denied: Wrong email or password", courseId, invalidAuth, review, done);
+		});
+		
+		it('should not POST when review has out of bounds rating', (done) => {
+			let badReview = review;
+			badReview.rating = 20;
+			failPostReview(500, "Review validation failed: rating: Path `rating` (20) is more than maximum allowed value (5).", courseId, validAuth, badReview, done);
+		});
+		
+		it('should not POST when rating is missing', (done) => {
+			let badReview = review;
+			badReview.rating = null;
+			failPostReview(500, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
+		});
+		
+		it('should not POST when not supplied with a review', (done) => {
+			let badReview = {};
+			failPostReview(500, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
+		});
+		
+		function successPostReview(courseId, auth, review, done) {
 			chai.request(server)
 				.post(courseIndexLink+courseId+'/reviews')
-				.auth(validAuth.user, validAuth.pass)
+				.auth(auth.user, auth.pass)
 				.send(review)
 				.end((err, res) => {
-					res.body.should.have.property('message').equal("Review Successfully added to Course!");
 					res.should.have.status(201);
+					done();
+				});
+		};
+		
+		function failPostReview(status, msg, courseId, auth, review, done) {
+			chai.request(server)
+				.post(courseIndexLink+courseId+'/reviews')
+				.auth(auth.user, auth.pass)
+				.send(review)
+				.end((err, res) => {
+					res.body.should.have.property('message').equal(msg);
+					res.should.have.status(status);
 					done();
 				});
 		};

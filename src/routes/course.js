@@ -11,9 +11,7 @@ GET routes
 
 router.get('/', (req, res, next) => {
 	Course.find({}, (err, courses) => {
-		if(err){
-			return next(err);
-		}
+		if(err) return next(err);
 		let coursesArray = [];
 		for(let i=0; i<courses.length; i++){
 			let obj = {
@@ -34,7 +32,7 @@ router.get('/:courseId', (req, res, next) => {
 		.populate({path: 'reviews',
 		 populate: {path: 'user'}})
 		.exec((err, course) => {
-			Utils.isError(err, next);
+			if(err) return next(err);
 			res.locals.course = course;
 			let status = 200;
 			return res.status(status).json({success: true, message: "Course Successfully retrieved!", status: status, course: res.locals.course });
@@ -46,7 +44,7 @@ PUT Routes
  */
 router.put('/:courseId', authorizeUser, (req, res, next) => {
 	Course.findByIdAndUpdate(req.params.courseId, req.body, (err, course) => {
-		Utils.isError(err, next);
+		if(err) return next(err);
 		let status = 204;
 		return res.status(status).json({}); //Send status 204 and no content..
 	});
@@ -61,9 +59,7 @@ router.post('/', authorizeUser, (req, res, next) => {
 	}
 	const courseData = req.body;
 	Course.create(courseData, (err, course) => {
-		if(err){
-			return next(err);
-		}
+		if(err) return next(err);
 		let status = 201;
 		return res.status(status).json({success: true, message: "Course Successfully added!", status: status, course});
 	});
@@ -72,17 +68,19 @@ router.post('/', authorizeUser, (req, res, next) => {
 router.post('/:courseId/reviews', authorizeUser, (req, res, next) => {
 	let review = new Review(req.body);
 	review.save((err) => {
-		Utils.isError(err, next);
+		if(err) return next(err);
 		Course.findById(req.params.courseId, (err, course) => {
-			Utils.isError(err, next);
+			if(err) return next(err);
 			course.reviews.push(review._id);
 			course.save((err) => {
-				Utils.isError(err, next);
+				if(err) return next(err);
 				let status = 201;
 				res.location('/api/courses/'+req.params.courseId);
-				return res.status(status).json({success: true, message: "Review Successfully added to Course!", status: status, course});
+				return res.status(status).json({});  //Supposed to return no content. therefore no json.
 			});
 		});
 	});
 });
+
+
 module.exports = router;

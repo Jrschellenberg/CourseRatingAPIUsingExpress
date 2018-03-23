@@ -1,10 +1,8 @@
 language: node_js
 node_js:
   - "stable"
-install:
+before_deploy:
   - snyk auth 3506ae72-b20f-4a2c-88c9-f0dcd58af679
-  - snyk protect
-  - snyk test
 services:
   - mongodb
 after_success:

@@ -35,6 +35,15 @@ describe('Users', () => {
 					done();
 				});
 		});
+		
+		it('should not GET if auth name is in database, but invalid password', (done) => {
+			let auth = {
+				user: 'joe@smith.com',
+				pass: 'notValidPass'
+			};
+			getAuthRequest(auth, 401, false, "Access Denied: Wrong email or password", done);
+		});
+		
 		it('should not GET if auth headers supplied are invalid', (done) => {
 			let auth = {
 				user: 'user@notValidEmail.com',

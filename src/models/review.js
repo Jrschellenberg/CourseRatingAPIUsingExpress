@@ -22,11 +22,6 @@ const ReviewSchema = new Schema({
 	}
 });
 
-ReviewSchema.methods.getUser = function(cb) {
-	return User.findById(this.user, cb);
-};
-
-
 const Review = mongoose.model('Review', ReviewSchema);
 module.exports = Review;
 

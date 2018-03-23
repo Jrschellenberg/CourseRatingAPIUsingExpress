@@ -54,7 +54,10 @@ describe('Courses', () => {
 		});
 	});
 	
-	describe('/PUT course', () => {
+	/*
+	PUT Tests
+	 */
+	describe('/PUT courses', () => {
 		let course = {
 			title: "My first title!",
 			description: "My course description",
@@ -93,6 +96,9 @@ describe('Courses', () => {
 		});
 	});
 	
+	/*
+	POST Tests
+	 */
 	describe('/POST courses', () => {
 		it('should POST a course with proper fields and proper auth', (done) => {
 			let course = {
@@ -120,7 +126,6 @@ describe('Courses', () => {
 					done();
 				});
 		});
-		
 		
 		it('should not POST a course with no fields', (done) => {
 			let course = {};
@@ -172,7 +177,7 @@ describe('Courses', () => {
 		}
 	});
 	
-	describe('/POST course/:courseId/reviews', () => {
+	describe('/POST courses/:courseId/reviews', () => {
 		let review = {
 			user: '57029ed4795118be119cc438',
 			postedOn: "2016-02-04T21:22:00.000Z",
@@ -239,5 +244,4 @@ describe('Courses', () => {
 				});
 		};
 	});
-	
 });

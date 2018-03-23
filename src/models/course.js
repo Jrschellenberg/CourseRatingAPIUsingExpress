@@ -46,15 +46,6 @@ const CourseSchema = new mongoose.Schema({
 	]
 });
 
-CourseSchema.methods.getUser = function(cb) {
-	return User.findById(this.user, cb);
-};
-
-CourseSchema.methods.getReview = function(index, cb) {
-	return Review.findById(this.reviews[index], cb);
-};
-
-
 const Course = mongoose.model('Course', CourseSchema);
 module.exports = Course;
 

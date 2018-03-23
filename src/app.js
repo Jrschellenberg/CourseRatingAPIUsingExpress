@@ -20,6 +20,8 @@ const course = require('./routes/course');
 const user = require('./routes/user');
 const app = express();
 
+//process.setMaxListeners(11);
+
 //const env = process.env.NODE_ENV || 'dev';
 
 //mongoDb Connection
@@ -42,7 +44,7 @@ db.on('connected', function() {
 			// Callback to populate DB once collections have been cleared
 			seeder.populateModels(data, function() {
 				console.log("Finished seeding Database!");
-				
+
 				app.emit("appStarted"); //Emits an event to tell our tests it is ok to now test.
 			});
 		});

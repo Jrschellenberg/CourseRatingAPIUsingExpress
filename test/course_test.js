@@ -90,8 +90,7 @@ describe('Courses', () => {
 					res.should.have.status(401);
 					done();
 				});
-		})
-		
+		});
 	});
 	
 	describe('/POST courses', () => {
@@ -173,5 +172,29 @@ describe('Courses', () => {
 		}
 	});
 	
+	describe('/POST course/:courseId/reviews', () => {
+		it('should POST when a review is supplied with proper information and has an authorized user', (done) => {
+			let review = {
+				user: '57029ed4795118be119cc438',
+				postedOn: "2016-02-04T21:22:00.000Z",
+				rating: 4,
+				review: "Lorem ipsum This is a review that I am writing, blah blah blah de blah"
+			};
+			let courseId = "57029ed4795118be119cc43d";
+			postReview(courseId, validAuth, review, done);
+		});
+		
+		function postReview(courseId, validAuth, review, done) {
+			chai.request(server)
+				.post(courseIndexLink+courseId+'/reviews')
+				.auth(validAuth.user, validAuth.pass)
+				.send(review)
+				.end((err, res) => {
+					res.body.should.have.property('message').equal("Review Successfully added to Course!");
+					res.should.have.status(201);
+					done();
+				});
+		};
+	});
 	
 });

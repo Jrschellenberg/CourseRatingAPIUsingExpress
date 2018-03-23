@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Course = require('../models/course');
+const Review = require('../models/review');
 import {authorizeUser} from "../middleware/index";
 import Utils from '../utils';
 
@@ -45,10 +46,8 @@ PUT Routes
  */
 router.put('/:courseId', authorizeUser, (req, res, next) => {
 	Course.findByIdAndUpdate(req.params.courseId, req.body, (err, course) => {
-		console.log("hit this?!?");
 		Utils.isError(err, next);
 		let status = 204;
-		console.log("how about here?!?!");
 		return res.status(status).json({}); //Send status 204 and no content..
 	});
 });
@@ -70,5 +69,20 @@ router.post('/', authorizeUser, (req, res, next) => {
 	});
 });
 
-
+router.post('/:courseId/reviews', authorizeUser, (req, res, next) => {
+	let review = new Review(req.body);
+	review.save((err) => {
+		Utils.isError(err, next);
+		Course.findById(req.params.courseId, (err, course) => {
+			Utils.isError(err, next);
+			course.reviews.push(review._id);
+			course.save((err) => {
+				Utils.isError(err, next);
+				let status = 201;
+				res.location('/api/courses/'+req.params.courseId);
+				return res.status(status).json({success: true, message: "Review Successfully added to Course!", status: status, course});
+			});
+		});
+	});
+});
 module.exports = router;

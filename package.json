@@ -8,7 +8,8 @@
     "nodemon": "nodemon -e pug,js,css --exec npm run babel-node -- src/bin/www",
     "start": "SET NODE_ENV=dev && npm run nodemon",
     "test": "snyk test && mocha --exit --timeout 10000 --compilers js:babel-core/register",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --exit --timeout 10000 --compilers js:babel-core/register"
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --exit --timeout 10000 --compilers js:babel-core/register",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "author": "",
   "license": "ISC",

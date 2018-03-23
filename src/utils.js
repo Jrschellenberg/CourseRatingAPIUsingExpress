@@ -4,4 +4,8 @@ export default class Utils {
 		err.status = status;
 		return next(err);
 	}
+	static propagateError(err, status, next){
+		err.status = status;
+		return next(err);
+	}
 }

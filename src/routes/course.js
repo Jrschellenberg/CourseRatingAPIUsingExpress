@@ -32,7 +32,7 @@ router.get('/:courseId', (req, res, next) => {
 		.populate({path: 'reviews',
 		 populate: {path: 'user'}})
 		.exec((err, course) => {
-			if(err) return next(err);
+			if(err) return Utils.propagateError(err, 400, next);
 			res.locals.course = course;
 			let status = 200;
 			return res.status(status).json({success: true, message: "Course Successfully retrieved!", status: status, course: res.locals.course });
@@ -44,7 +44,7 @@ PUT Routes
  */
 router.put('/:courseId', authorizeUser, (req, res, next) => {
 	Course.findByIdAndUpdate(req.params.courseId, req.body, (err, course) => {
-		if(err) return next(err);
+		if(err) return Utils.propagateError(err, 400, next);
 		let status = 204;
 		return res.status(status).json({}); //Send status 204 and no content..
 	});
@@ -59,7 +59,7 @@ router.post('/', authorizeUser, (req, res, next) => {
 	}
 	const courseData = req.body;
 	Course.create(courseData, (err, course) => {
-		if(err) return next(err);
+		if(err) return Utils.propagateError(err, 400, next);
 		let status = 201;
 		return res.status(status).json({success: true, message: "Course Successfully added!", status: status, course});
 	});
@@ -68,12 +68,12 @@ router.post('/', authorizeUser, (req, res, next) => {
 router.post('/:courseId/reviews', authorizeUser, (req, res, next) => {
 	let review = new Review(req.body);
 	review.save((err) => {
-		if(err) return next(err);
+		if(err) return Utils.propagateError(err, 400, next);
 		Course.findById(req.params.courseId, (err, course) => {
-			if(err) return next(err);
+			if(err) return Utils.propagateError(err, 400, next);
 			course.reviews.push(review._id);
 			course.save((err) => {
-				if(err) return next(err);
+				if(err) return Utils.propagateError(err, 400, next);
 				let status = 201;
 				res.location('/api/courses/'+req.params.courseId);
 				return res.status(status).json({});  //Supposed to return no content. therefore no json.

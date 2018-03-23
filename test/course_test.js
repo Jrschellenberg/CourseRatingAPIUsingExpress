@@ -202,18 +202,18 @@ describe('Courses', () => {
 		it('should not POST when review has out of bounds rating', (done) => {
 			let badReview = review;
 			badReview.rating = 20;
-			failPostReview(500, "Review validation failed: rating: Path `rating` (20) is more than maximum allowed value (5).", courseId, validAuth, badReview, done);
+			failPostReview(400, "Review validation failed: rating: Path `rating` (20) is more than maximum allowed value (5).", courseId, validAuth, badReview, done);
 		});
 		
 		it('should not POST when rating is missing', (done) => {
 			let badReview = review;
 			badReview.rating = null;
-			failPostReview(500, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
+			failPostReview(400, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
 		});
 		
 		it('should not POST when not supplied with a review', (done) => {
 			let badReview = {};
-			failPostReview(500, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
+			failPostReview(400, "Review validation failed: rating: Path `rating` is required.", courseId, validAuth, badReview, done);
 		});
 		
 		function successPostReview(courseId, auth, review, done) {

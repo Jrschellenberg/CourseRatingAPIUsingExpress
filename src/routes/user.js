@@ -10,10 +10,8 @@ router.get('/', authorizeUser, (req, res, next) => {
 		return Utils.throwError(401, "Invalid or missing SessionId", next);
 	}
 	User.findById(req.session.userId)
-		.exec((error, user) => {
-			if(error){
-				return next(error);
-			}
+		.exec((err, user) => {
+			if(err) return Utils.propagateError(err, 400, next);
 			let status = 200;
 			res.status(status).json({success: true, message: "User Successfully retrieved", status: status, user: user});
 		});
@@ -30,14 +28,10 @@ router.post('/', (req, res, next) => {
 		return Utils.throwError(400, "Malformed Email Supplied", next);
 	}
 	User.userExist(req.body.emailAddress, (err) => {
-		if(err){
-			return next(err);
-		}
+		if(err) return Utils.propagateError(err, 409, next);
 		const userData = req.body;
 		User.create(userData, (err, user) => {
-			if (err) {
-				return next(err);
-			}
+			if(err) return Utils.propagateError(err, 400, next);
 			res.location('/');
 			return res.status(201).json({success: true, message: "User Successfully added!", status: 201, user});
 		});

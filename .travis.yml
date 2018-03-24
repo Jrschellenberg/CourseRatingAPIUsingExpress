@@ -6,9 +6,12 @@ node_js:
   - "stable"
 before_script:
   - snyk auth 3506ae72-b20f-4a2c-88c9-f0dcd58af679
+script:
+  - npm run coverage
 services:
   - mongodb
 after_success:
+  - npm run coveralls
   - snyk monitor
 after_deploy:
   - snyk monitor

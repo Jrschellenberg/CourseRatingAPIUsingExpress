@@ -1,4 +1,4 @@
-# TeamTreeHouseProject11 [![Build Status](https://travis-ci.org/Threatsignal/TeamTreeHouseProject11.svg?branch=master)](https://travis-ci.org/Threatsignal/TeamTreeHouseProject11) [![Known Vulnerabilities](https://snyk.io/test/github/Threatsignal/TeamTreeHouseProject11/badge.svg)](https://snyk.io/test/github/Threatsignal}/TeamTreeHouseProject11)
+# TeamTreeHouseProject11 [![Build Status](https://travis-ci.org/Threatsignal/TeamTreeHouseProject11.svg?branch=master)](https://travis-ci.org/Threatsignal/TeamTreeHouseProject11) [![Known Vulnerabilities](https://snyk.io/test/github/Threatsignal/TeamTreeHouseProject11/badge.svg)](https://snyk.io/test/github/Threatsignal}/TeamTreeHouseProject11) [![Coverage Status](https://coveralls.io/repos/github/Threatsignal/TeamTreeHouseProject11/badge.svg?branch=master)](https://coveralls.io/github/Threatsignal/TeamTreeHouseProject11?branch=master)
 
 A Project creating a REST API using express. The API will provide a way for users to review educational courses: users can see a list of courses in a database; add courses to the database; and add reviews for a specific course.
 

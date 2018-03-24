@@ -8,7 +8,9 @@
     "nodemon": "nodemon -e pug,js,css --exec npm run babel-node -- src/bin/www",
     "start": "SET NODE_ENV=dev && npm run nodemon",
     "test": "snyk test && mocha --exit --timeout 10000 --compilers js:babel-core/register",
+    "build": "babel src -d dist --minified --copy-files --ignore sass/*,public/stylesheets/*,frontEndJS/*,public/js/bundle.js.map",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --exit --timeout 10000 --compilers js:babel-core/register",
+    "lint": "node_modules/.bin/goodparts src",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "author": "",
@@ -24,6 +26,7 @@
     "concurrently": "^3.5.1",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.4",
+    "goodparts": "^1.2.1",
     "mocha": "^5.0.5",
     "nodemon": "^1.9.1",
     "nyc": "^11.6.0",

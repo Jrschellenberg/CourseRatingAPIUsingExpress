@@ -1,0 +1,13 @@
+{
+  "env":{
+    "node": true,
+    "es6": true,
+    "mongo": true,
+    "amd": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  }
+}

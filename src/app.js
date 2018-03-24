@@ -19,7 +19,6 @@ const dbConfig = config.get('DBHost');
 const course = require('./routes/course');
 const user = require('./routes/user');
 const app = express();
-
 //process.setMaxListeners(11);
 
 //const env = process.env.NODE_ENV || 'dev';
@@ -35,9 +34,9 @@ db.on('connected', function() {
 		console.log("seeder connected to Database "+dbConfig);
 		// Load Mongoose models
 		seeder.loadModels([
-			'./src/models/user',
-			'./src/models/course',
-			'./src/models/review'
+			__dirname+'/models/user',
+			__dirname+'/models/course',
+			__dirname+'/models/review'
 		]);
 		// Clear specified collections
 		seeder.clearModels(['User', 'Course', 'Review'], function() {

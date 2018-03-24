@@ -1,9 +1,9 @@
-const server = require("./app");
+const server = require('./app');
 
 let dataBaseFinishSeed = false;
 
 server.on('appStarted', () => {
-	dataBaseFinishSeed = true;
+  dataBaseFinishSeed = true;
 });
 
-export {dataBaseFinishSeed}
+export { dataBaseFinishSeed };

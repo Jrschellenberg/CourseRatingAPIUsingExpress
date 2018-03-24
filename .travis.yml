@@ -1,7 +1,10 @@
 language: node_js
+notifications:
+  on_success: never
+  on_failure: never
 node_js:
   - "stable"
-before_deploy:
+before_script:
   - snyk auth 3506ae72-b20f-4a2c-88c9-f0dcd58af679
 services:
   - mongodb

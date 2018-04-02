@@ -14,3 +14,5 @@ This project requires mongoDb installed and configured on the server. For more i
 - Once finished installing dependencies Run: `npm start`
 - To run tests on project Run: `npm test`
 - To get coverage report on project Run: `npm run coverage`
+
+

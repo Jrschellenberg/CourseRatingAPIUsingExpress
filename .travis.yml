@@ -5,7 +5,7 @@ notifications:
 node_js:
   - "stable"
 before_script:
-  - snyk auth 3506ae72-b20f-4a2c-88c9-f0dcd58af679
+  - snyk auth 1bd0a425-8b1e-4c45-a5b5-33506f6fd219
 script:
   - npm run coverage
 services:

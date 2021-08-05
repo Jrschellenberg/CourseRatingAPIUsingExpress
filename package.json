@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "basic-auth": "^2.0.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "body-parser": "~1.18.2",
     "config": "^1.30.0",
     "connect-mongo": "^2.0.1",
